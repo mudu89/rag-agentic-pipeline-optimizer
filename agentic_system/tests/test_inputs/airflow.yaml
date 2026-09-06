@@ -1,0 +1,51 @@
+ # Anti-pattern: Monolithic ETL
+# (E, T, and L all in one giant task)
+
+dag:
+  description: "An ETL pipeline to validate optimization"
+  schedule_interval: "@daily"
+  start_date: "2026-01-01"
+  catchup: true
+  tasks:
+    - task_id: "monolithic_etl_task"
+      operator: "airflow.operators.python.PythonOperator"
+      python_callable: |
+        def bad_etl_process():
+            import pandas as pd
+            import requests
+           
+            response = requests.get("https://example.com")
+            data = response.json()
+
+            df = pd.DataFrame(data)
+
+            for index, row in df.iterrows():
+                df.at[index, "processed_value"] = row["raw_value"] * 1.10
+
+            from sqlalchemy import create_engine
+
+            engine = create_engine(
+                "postgresql://admin:super_secret_password@10.0.0.5:5432/prod_db"
+            )
+
+            df.to_sql(
+                "target_table",
+                con=engine,
+                if_exists="append",
+                index=False,
+            )
+
+            return df.to_dict(orient="records")
+
+    - task_id: "audit_report_task"
+      operator: "airflow.operators.python.PythonOperator"
+      python_callable: |
+        def audit_data(**context):
+            data_from_xcom = context["ti"].xcom_pull(
+                task_ids="monolithic_etl_task"
+            )
+
+            print(f"Auditing {len(data_from_xcom)} records.")
+
+  dependencies:
+    - "monolithic_etl_task"

@@ -1,0 +1,79 @@
+# =============================================================================
+# requirements.txt
+# Project: Intelligent Optimization of Data Pipelines using RAG-Based
+#          Knowledge Retrieval and Agentic Decision Systems
+# Author:  Mohammed Mudassirullah Sheriff
+# BITS Pilani WILP — M.Tech Data Science & Engineering
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Core ML / Embedding
+# -----------------------------------------------------------------------------
+sentence-transformers==2.7.0        # HuggingFace embeddings (all-MiniLM-L6-v2)
+torch==2.3.0                        # Required by sentence-transformers
+transformers==4.41.0                # Required by sentence-transformers
+numpy==1.26.4                       # Numerical operations + FAISS interface
+
+# -----------------------------------------------------------------------------
+# Vector Store
+# -----------------------------------------------------------------------------
+faiss-cpu==1.8.0                    # FAISS vector index (CPU version)
+                                    # Use faiss-gpu if CUDA is available
+
+# -----------------------------------------------------------------------------
+# LLM Providers (install only the one(s) you plan to use)
+# -----------------------------------------------------------------------------
+openai==1.30.1                      # OpenAI GPT-4o, GPT-3.5-turbo
+anthropic==0.28.0                   # Anthropic Claude models
+huggingface-hub==0.23.2             # HuggingFace Inference API (Mistral, LLaMA)
+google-generativeai==0.5.4          # Google Gemini models
+
+# -----------------------------------------------------------------------------
+# API Layer
+# -----------------------------------------------------------------------------
+fastapi==0.110.3                    # REST API framework
+uvicorn==0.29.0                     # ASGI server for FastAPI
+python-multipart==0.0.9             # File upload support for FastAPI
+pydantic==2.7.4                     # Request/response validation (FastAPI dependency)
+
+# -----------------------------------------------------------------------------
+# Configuration
+# -----------------------------------------------------------------------------
+pyyaml==6.0.1                       # YAML config file parsing (config.yaml)
+
+# -----------------------------------------------------------------------------
+# Utilities
+# -----------------------------------------------------------------------------
+tqdm==4.66.4                        # Progress bars (used in embedding scripts)
+python-dotenv==1.0.1                # Load API keys from .env file
+pathlib2==2.3.7                     # Path utilities (Python 3.10+ has this built-in)
+
+# -----------------------------------------------------------------------------
+# Document Processing (Layer 2 — optional, for PDF source documents)
+# -----------------------------------------------------------------------------
+# pypdf2==3.0.1                       # Extract text from PDF source documents
+# markdown==3.6                       # Parse Markdown documents for chunking
+pdfplumber==0.11.4                  # Extract text from PDF source documents
+beautifulsoup4==4.12.3              # Extract text from HTML source documents
+
+# -----------------------------------------------------------------------------
+# NLP — Chunking & Tag Enrichment (Layer 2 — sentence_chunk_enrich.py)
+# Cleaned plain text -> sentence-aware chunks + platform/keyphrase tags.
+# -----------------------------------------------------------------------------
+spacy==3.7.4                        # Sentence segmentation (blank pipeline +
+                                    # rule-based sentencizer only — no
+                                    # en_core_web_sm model download required)
+blis==0.7.11                        # Pinned explicitly: spacy's dependency
+                                    # chain (thinc) allows blis>=0.7.8,<0.8.0,
+                                    # an unpinned range. pip's resolver can
+                                    # backtrack into blis==0.7.10, which has
+                                    # no prebuilt wheel for Python 3.12 /
+                                    # Apple Silicon and fails to build from
+                                    # source (Cython/numpy header mismatch).
+                                    # 0.7.11 has a prebuilt wheel and avoids
+                                    # the source build entirely.
+yake==0.4.8                         # Unsupervised keyphrase extraction
+# -----------------------------------------------------------------------------
+# Testing and Evaluation
+# -----------------------------------------------------------------------------
+pytest==8.2.0                       # Optional: run tests with pytest

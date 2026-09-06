@@ -1,0 +1,56 @@
+# config.yaml
+# ===========
+# Central configuration for the Agentic Decision System.
+# Change 'provider' and 'model' here to switch LLMs — no code changes needed.
+#
+# Supported providers: openai | anthropic | huggingface | google
+#
+# Author: Mohammed Mudassirullah Sheriff
+# Project: Intelligent Optimization of Data Pipelines using RAG-Based
+#          Knowledge Retrieval and Agentic Decision Systems
+
+llm:
+  provider: "huggingface"
+  model: "mistralai/Mistral-7B-Instruct-v0.2"
+  api_key_env: "HF_API_KEY"
+  
+  # provider: "openai"                # openai | anthropic | huggingface | google
+  # model: "gpt-4o"                   # Model string for the selected provider
+  # api_key_env: "OPENAI_API_KEY"     # Environment variable holding the API key
+  # temperature: 0.2                  # Low = deterministic; preferred for structured output
+  # max_tokens: 1500                  # Max tokens per LLM response
+
+  # Provider-specific model examples (uncomment to switch):
+  # provider: "anthropic"
+  # model: "claude-sonnet-4-6"
+  # api_key_env: "ANTHROPIC_API_KEY"
+
+  # provider: "google"
+  # model: "gemini-1.5-flash"
+  # api_key_env: "GOOGLE_API_KEY"
+
+  
+
+knowledge_base:
+  index_path: "/Users/206909594/Documents/Dissertation/codebase/knowledge_base/index/faiss_index.bin"
+  metadata_path: "/Users/206909594/Documents/Dissertation/codebase/knowledge_base/index/metadata_store.json"
+  embedding_model: "all-MiniLM-L6-v2"
+  top_k: 5                          # Number of KB results to retrieve per query
+  min_similarity: 0.40              # Minimum cosine similarity to include a result
+  layer1_preference: true           # Apply score bonus to Layer 1 structured entries
+
+agents:
+  max_recommendations: 3            # Maximum recommendations in final output
+  max_retries: 3                    # LLM call retries on malformed JSON
+  retry_delay_seconds: 2            # Delay between retries
+  include_agent_trace: true         # Include full agent trace in output (for explainability)
+
+api:
+  host: "0.0.0.0"
+  port: 8000
+  debug: false
+
+logging:
+  level: "INFO"                     # DEBUG | INFO | WARNING | ERROR
+  log_to_file: true
+  log_path: "../logs/pipeline.log"

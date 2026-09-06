@@ -1,0 +1,96 @@
+{
+  "_schema_meta": {
+    "schema_name": "Knowledge Base Layer 1 — Structured Optimization Entry",
+    "version": "1.0",
+    "project": "Intelligent Optimization of Data Pipelines using RAG-Based Knowledge Retrieval and Agentic Decision Systems",
+    "author": "Mohammed Mudassirullah Sheriff",
+    "institution": "BITS Pilani WILP — M.Tech Data Science & Engineering",
+    "created_date": "2026-05-15",
+    "description": "Defines the complete field-level schema for each structured knowledge entry in Layer 1 of the knowledge base. All entries must conform to this schema before being embedded and indexed into FAISS.",
+    "embedding_text_template": "{title}. {problem_description}. {optimization_strategy}. {tags joined by space}.",
+    "enums": {
+      "category": [
+        "SQL Optimization",
+        "ETL Optimization",
+        "Indexing Strategy",
+        "Partitioning Strategy",
+        "Caching Strategy",
+        "Query Rewrite Pattern",
+        "Workflow Execution Optimization"
+      ],
+      "input_type": [
+        "SQL Query",
+        "ETL Workflow",
+        "Pipeline Log",
+        "Metadata"
+      ],
+      "severity": [
+        "Low",
+        "Medium",
+        "High",
+        "Critical"
+      ]
+    }
+  },
+
+  "_field_definitions": [
+    { "field": "entry_id",                "type": "string",           "role": ["Display"],                    "mandatory": true,  "purpose": "Unique identifier for the knowledge entry", "example": "KB-SQL-001" },
+    { "field": "title",                   "type": "string",           "role": ["Retrieval", "Display"],       "mandatory": true,  "purpose": "Short human-readable name of the optimization pattern", "example": "Avoid SELECT * in large table queries" },
+    { "field": "category",                "type": "string (enum)",    "role": ["Filter"],                     "mandatory": true,  "purpose": "Top-level category from the taxonomy", "example": "SQL Optimization" },
+    { "field": "subcategory",             "type": "string (enum)",    "role": ["Filter"],                     "mandatory": true,  "purpose": "Sub-category within the top-level category", "example": "Column Projection" },
+    { "field": "problem_description",     "type": "string",           "role": ["Retrieval"],                  "mandatory": true,  "purpose": "Description of the inefficiency or problem this entry addresses", "example": "Selecting all columns causes unnecessary I/O and memory usage" },
+    { "field": "root_cause",              "type": "string",           "role": ["Retrieval", "Display"],       "mandatory": true,  "purpose": "Why this problem occurs in practice", "example": "Developer convenience habit; schema not known at query time" },
+    { "field": "optimization_strategy",   "type": "string",           "role": ["Retrieval", "Display"],       "mandatory": true,  "purpose": "The recommended fix or optimization approach", "example": "Replace SELECT * with explicit column list relevant to the use case" },
+    { "field": "before_example",          "type": "string",           "role": ["Display"],                    "mandatory": true,  "purpose": "Code or pattern showing the inefficient state before optimization", "example": "SELECT * FROM orders WHERE status = 'active'" },
+    { "field": "after_example",           "type": "string",           "role": ["Display"],                    "mandatory": true,  "purpose": "Code or pattern showing the optimized state after applying the strategy", "example": "SELECT order_id, customer_id, status FROM orders WHERE status = 'active'" },
+    { "field": "explanation",             "type": "string",           "role": ["Retrieval", "Display"],       "mandatory": true,  "purpose": "Why this optimization works — used directly in the explainability output", "example": "Reduces columns fetched from storage, lowers memory pressure, enables column pruning in columnar engines" },
+    { "field": "expected_impact",         "type": "object",           "role": ["Display"],                    "mandatory": true,  "purpose": "Estimated performance improvement — structured for recommendation report output", "example": {"execution_time": "10–40% reduction", "cost": "low", "memory": "medium reduction"} },
+    { "field": "applicability_conditions","type": "list of strings",  "role": ["Retrieval", "Filter"],        "mandatory": true,  "purpose": "Conditions under which this optimization applies — used by Reasoning Agent for relevance filtering", "example": ["large tables", "columnar storage", "OLAP workloads"] },
+    { "field": "tags",                    "type": "list of strings",  "role": ["Filter", "Retrieval"],        "mandatory": true,  "purpose": "Keywords for broader semantic matching and filtering", "example": ["SELECT *", "column pruning", "I/O optimization", "query rewrite"] },
+    { "field": "platform",                "type": "list of strings",  "role": ["Filter"],                     "mandatory": true,  "purpose": "Data platforms where this optimization applies", "example": ["Spark", "Hive", "PostgreSQL", "BigQuery"] },
+    { "field": "input_type",              "type": "string (enum)",    "role": ["Filter"],                     "mandatory": true,  "purpose": "Which pipeline input type triggers this entry — enables pre-filtering before vector search", "example": "SQL Query" },
+    { "field": "severity",                "type": "string (enum)",    "role": ["Filter", "Display"],          "mandatory": true,  "purpose": "Criticality of the detected issue when this pattern is matched", "example": "High" },
+    { "field": "source",                  "type": "string",           "role": ["Display"],                    "mandatory": true,  "purpose": "Origin of this knowledge entry — for academic and audit traceability", "example": "AWS Data Engineering Best Practices Guide" },
+    { "field": "embedding_text",          "type": "string",           "role": ["Retrieval"],                  "mandatory": true,  "purpose": "Concatenated text used to generate the vector embedding at index time. Built from template: {title}. {problem_description}. {optimization_strategy}. {tags}.", "example": "Avoid SELECT * in large table queries. SELECT * retrieves all columns causing unnecessary I/O. Replace SELECT * with explicit column list. Column pruning I/O optimization query rewrite columnar storage." },
+    { "field": "confidence_score",        "type": "float (0.0–1.0)",  "role": ["Display"],                    "mandatory": true,  "purpose": "Curator's confidence in this entry's correctness and applicability — used by Reasoning Agent to weight retrieved entries", "example": 0.95 },
+    { "field": "related_entries",         "type": "list of strings",  "role": ["Display"],                    "mandatory": false, "purpose": "Cross-references to related KB entries by entry_id", "example": ["KB-SQL-005", "KB-IDX-002"] },
+    { "field": "notes",                   "type": "string",           "role": ["Display"],                    "mandatory": false, "purpose": "Additional curator commentary, caveats, or edge case notes", "example": "Less impactful on row-store engines like MySQL for small tables" },
+    { "field": "created_date",            "type": "string (ISO 8601)","role": ["Display"],                    "mandatory": true,  "purpose": "Date the entry was created — for versioning and audit trail", "example": "2026-05-15" },
+    { "field": "version",                 "type": "string",           "role": ["Display"],                    "mandatory": false, "purpose": "Schema version tag for future-proofing and migration management", "example": "1.0" }
+  ],
+
+  "_sample_entry": {
+    "entry_id": "KB-SQL-001",
+    "title": "Avoid SELECT * in large table queries",
+    "category": "SQL Optimization",
+    "subcategory": "Column Projection",
+    "problem_description": "Using SELECT * retrieves all columns from a table, causing unnecessary I/O, memory consumption, and preventing columnar storage optimizations.",
+    "root_cause": "Developer convenience; schema not fully known at query-writing time; lack of query review process.",
+    "optimization_strategy": "Replace SELECT * with an explicit list of only the columns required by the downstream consumer or transformation.",
+    "before_example": "SELECT * FROM orders WHERE status = 'active';",
+    "after_example": "SELECT order_id, customer_id, status, created_at FROM orders WHERE status = 'active';",
+    "explanation": "Columnar storage engines (Spark, BigQuery, Hive ORC) read only the columns requested. Specifying columns explicitly enables column pruning, reduces bytes scanned, lowers memory pressure on executors, and decreases shuffle costs in distributed environments.",
+    "expected_impact": {
+      "execution_time": "10–40% reduction depending on table width",
+      "cost": "Medium reduction in cloud scan costs",
+      "memory": "Proportional reduction based on columns eliminated"
+    },
+    "applicability_conditions": [
+      "Wide tables with 20+ columns",
+      "Columnar storage formats (Parquet, ORC)",
+      "OLAP and analytical workloads",
+      "Spark, BigQuery, Hive environments"
+    ],
+    "tags": ["SELECT *", "column pruning", "I/O optimization", "query rewrite", "columnar storage"],
+    "platform": ["Spark", "Hive", "BigQuery", "PostgreSQL", "Trino"],
+    "input_type": "SQL Query",
+    "severity": "High",
+    "source": "AWS Data Engineering Best Practices Guide",
+    "embedding_text": "Avoid SELECT * in large table queries. SELECT * retrieves all columns causing unnecessary I/O and memory usage. Replace SELECT * with explicit column list. SELECT * column pruning I/O optimization query rewrite columnar storage.",
+    "confidence_score": 0.95,
+    "related_entries": ["KB-SQL-002", "KB-IDX-003"],
+    "notes": "Less impactful on narrow tables (< 5 columns) or row-store engines for point lookups.",
+    "created_date": "2026-05-15",
+    "version": "1.0"
+  }
+}

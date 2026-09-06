@@ -1,0 +1,220 @@
+2026-07-31 12:37:15,763 [INFO] core.pipeline — ============================================================
+2026-07-31 12:37:15,763 [INFO] core.pipeline — Initializing Pipeline...
+2026-07-31 12:37:15,763 [INFO] core.pipeline — ============================================================
+2026-07-31 12:37:15,763 [INFO] core.pipeline — Loading LLM client...
+2026-07-31 12:38:15,037 [INFO] core.pipeline — ============================================================
+2026-07-31 12:38:15,037 [INFO] core.pipeline — Initializing Pipeline...
+2026-07-31 12:38:15,037 [INFO] core.pipeline — ============================================================
+2026-07-31 12:38:15,037 [INFO] core.pipeline — Loading LLM client...
+2026-07-31 12:39:37,720 [INFO] core.pipeline — ============================================================
+2026-07-31 12:39:37,721 [INFO] core.pipeline — Initializing Pipeline...
+2026-07-31 12:39:37,721 [INFO] core.pipeline — ============================================================
+2026-07-31 12:39:37,721 [INFO] core.pipeline — Loading LLM client...
+2026-07-31 12:39:37,947 [INFO] core.llm_client — LLMClient initialized — provider=openai, model=gpt-4o
+2026-07-31 12:39:37,947 [INFO] core.pipeline — Loading knowledge base...
+2026-07-31 12:39:38,024 [INFO] faiss.loader — Loading faiss.
+2026-07-31 12:39:38,042 [INFO] faiss.loader — Successfully loaded faiss.
+2026-07-31 12:39:39,447 [INFO] sentence_transformers.SentenceTransformer — Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2026-07-31 12:44:09,655 [INFO] core.pipeline — ============================================================
+2026-07-31 12:44:09,655 [INFO] core.pipeline — Initializing Pipeline...
+2026-07-31 12:44:09,655 [INFO] core.pipeline — ============================================================
+2026-07-31 12:44:09,655 [INFO] core.pipeline — Loading LLM client...
+2026-07-31 12:44:09,916 [INFO] core.llm_client — LLMClient initialized — provider=openai, model=gpt-4o
+2026-07-31 12:44:09,916 [INFO] core.pipeline — Loading knowledge base...
+2026-07-31 12:44:11,319 [INFO] faiss.loader — Loading faiss.
+2026-07-31 12:44:11,369 [INFO] faiss.loader — Successfully loaded faiss.
+2026-07-31 12:44:11,374 [INFO] sentence_transformers.SentenceTransformer — Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2026-07-31 12:44:14,033 [INFO] sentence_transformers.SentenceTransformer — Use pytorch device_name: mps
+2026-07-31 12:44:14,255 [INFO] core.pipeline — Pipeline ready.
+2026-07-31 12:44:14,255 [INFO] core.pipeline — ============================================================
+2026-07-31 12:44:14,255 [INFO] core.pipeline — Pipeline run started
+2026-07-31 12:44:14,255 [INFO] core.pipeline — ============================================================
+2026-07-31 12:44:14,255 [INFO] core.pipeline — [Stage 2.1] Ingestion & Preprocessing
+2026-07-31 12:44:14,256 [INFO] core.ingestion — Input type detected: SQL Query (scores: {'SQL Query': 3, 'ETL Workflow': 0, 'Metadata': 0, 'Pipeline Log': 0})
+2026-07-31 12:44:14,256 [INFO] core.ingestion — Ingestion complete — type=SQL Query, chars=142, lines=8
+2026-07-31 12:44:14,256 [INFO] core.pipeline — [Stage 2.1] Complete — type=SQL Query, elapsed=0.00s
+2026-07-31 12:44:14,256 [INFO] core.pipeline — [Agent 1] Analyzer Agent
+2026-07-31 12:44:14,256 [INFO] agents.analyzer_agent — [Analyzer Agent] Running on input_type=SQL Query
+2026-07-31 12:44:16,304 [INFO] httpx — HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-07-31 12:44:16,305 [INFO] openai._base_client — Retrying request to /chat/completions in 0.862756 seconds
+2026-07-31 12:44:17,757 [INFO] httpx — HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-07-31 12:44:17,758 [INFO] openai._base_client — Retrying request to /chat/completions in 1.849936 seconds
+2026-07-31 12:44:20,095 [INFO] httpx — HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-07-31 12:44:20,098 [WARNING] core.llm_client — LLM call failed (attempt 1/3): Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-07-31 12:44:22,572 [INFO] httpx — HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-07-31 12:44:22,573 [INFO] openai._base_client — Retrying request to /chat/completions in 0.975963 seconds
+2026-07-31 12:44:24,094 [INFO] httpx — HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-07-31 12:44:24,095 [INFO] openai._base_client — Retrying request to /chat/completions in 1.916963 seconds
+2026-07-31 12:44:26,359 [INFO] httpx — HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-07-31 12:44:26,360 [WARNING] core.llm_client — LLM call failed (attempt 2/3): Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-07-31 12:44:28,715 [INFO] httpx — HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-07-31 12:44:28,716 [INFO] openai._base_client — Retrying request to /chat/completions in 0.929004 seconds
+2026-07-31 12:44:29,957 [INFO] httpx — HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-07-31 12:44:29,958 [INFO] openai._base_client — Retrying request to /chat/completions in 1.858996 seconds
+2026-07-31 12:44:32,195 [INFO] httpx — HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-07-31 12:44:32,197 [WARNING] core.llm_client — LLM call failed (attempt 3/3): Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-07-31 12:44:32,197 [WARNING] agents.analyzer_agent — [Analyzer Agent] LLM call failed: LLM call failed after 3 attempts. Last error: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}. Falling back to rule-based analysis.
+2026-07-31 12:44:32,197 [INFO] agents.analyzer_agent — [Analyzer Agent] Complete — 2 patterns detected, fallback=True
+2026-07-31 12:44:32,197 [INFO] core.pipeline — [Agent 1] Complete — patterns=2, elapsed=17.94s
+2026-07-31 12:44:32,197 [INFO] core.pipeline — [Agent 2] Retrieval Agent
+2026-07-31 12:44:32,198 [INFO] agents.retrieval_agent — [Retrieval Agent] Running — query='SQL Query optimization. SELECT * used — all columns retrieve...'
+2026-07-31 12:44:32,719 [INFO] agents.retrieval_agent — [Retrieval Agent] Retrieved 3 entries from KB.
+2026-07-31 12:44:33,026 [INFO] httpx — HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-07-31 12:44:33,027 [INFO] openai._base_client — Retrying request to /chat/completions in 0.811200 seconds
+2026-07-31 12:44:34,163 [INFO] httpx — HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-07-31 12:44:34,164 [INFO] openai._base_client — Retrying request to /chat/completions in 1.637397 seconds
+2026-07-31 12:44:36,189 [INFO] httpx — HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-07-31 12:44:36,190 [WARNING] core.llm_client — LLM call failed (attempt 1/3): Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-07-31 12:44:38,544 [INFO] httpx — HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-07-31 12:44:38,545 [INFO] openai._base_client — Retrying request to /chat/completions in 0.979810 seconds
+2026-07-31 12:44:39,841 [INFO] httpx — HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-07-31 12:44:39,842 [INFO] openai._base_client — Retrying request to /chat/completions in 1.960533 seconds
+2026-07-31 12:44:42,128 [INFO] httpx — HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-07-31 12:44:42,129 [WARNING] core.llm_client — LLM call failed (attempt 2/3): Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-07-31 13:01:45,885 [INFO] core.pipeline — ============================================================
+2026-07-31 13:01:45,885 [INFO] core.pipeline — Initializing Pipeline...
+2026-07-31 13:01:45,885 [INFO] core.pipeline — ============================================================
+2026-07-31 13:01:45,885 [INFO] core.pipeline — Loading LLM client...
+2026-07-31 13:01:46,177 [INFO] core.llm_client — LLMClient initialized — provider=huggingface, model=mistralai/Mistral-7B-Instruct-v0.2
+2026-07-31 13:01:46,177 [INFO] core.pipeline — Loading knowledge base...
+2026-07-31 13:01:48,177 [INFO] faiss.loader — Loading faiss.
+2026-07-31 13:01:48,213 [INFO] faiss.loader — Successfully loaded faiss.
+2026-07-31 13:01:48,218 [INFO] sentence_transformers.SentenceTransformer — Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2026-07-31 13:01:50,909 [INFO] sentence_transformers.SentenceTransformer — Use pytorch device_name: mps
+2026-07-31 13:01:51,177 [INFO] core.pipeline — Pipeline ready.
+2026-07-31 13:01:51,177 [INFO] core.pipeline — ============================================================
+2026-07-31 13:01:51,177 [INFO] core.pipeline — Pipeline run started
+2026-07-31 13:01:51,177 [INFO] core.pipeline — ============================================================
+2026-07-31 13:01:51,177 [INFO] core.pipeline — [Stage 2.1] Ingestion & Preprocessing
+2026-07-31 13:01:51,178 [INFO] core.ingestion — Input type detected: SQL Query (scores: {'SQL Query': 3, 'ETL Workflow': 0, 'Metadata': 0, 'Pipeline Log': 0})
+2026-07-31 13:01:51,178 [INFO] core.ingestion — Ingestion complete — type=SQL Query, chars=142, lines=8
+2026-07-31 13:01:51,178 [INFO] core.pipeline — [Stage 2.1] Complete — type=SQL Query, elapsed=0.00s
+2026-07-31 13:01:51,178 [INFO] core.pipeline — [Agent 1] Analyzer Agent
+2026-07-31 13:01:51,178 [INFO] agents.analyzer_agent — [Analyzer Agent] Running on input_type=SQL Query
+2026-07-31 13:01:51,234 [WARNING] core.llm_client — LLM call failed (attempt 1/3): (MaxRetryError('HTTPSConnectionPool(host=\'api-inference.huggingface.co\', port=443): Max retries exceeded with url: /models/mistralai/Mistral-7B-Instruct-v0.2/v1/chat/completions (Caused by NameResolutionError("HTTPSConnection(host=\'api-inference.huggingface.co\', port=443): Failed to resolve \'api-inference.huggingface.co\' ([Errno 8] nodename nor servname provided, or not known)"))'), '(Request ID: 501d66a0-e411-43f5-a67d-a4d775eeab58)')
+2026-07-31 13:01:53,244 [WARNING] core.llm_client — LLM call failed (attempt 2/3): (MaxRetryError('HTTPSConnectionPool(host=\'api-inference.huggingface.co\', port=443): Max retries exceeded with url: /models/mistralai/Mistral-7B-Instruct-v0.2/v1/chat/completions (Caused by NameResolutionError("HTTPSConnection(host=\'api-inference.huggingface.co\', port=443): Failed to resolve \'api-inference.huggingface.co\' ([Errno 8] nodename nor servname provided, or not known)"))'), '(Request ID: 1307dbee-c37a-4148-87bf-b33d1c69da5f)')
+2026-07-31 13:01:55,254 [WARNING] core.llm_client — LLM call failed (attempt 3/3): (MaxRetryError('HTTPSConnectionPool(host=\'api-inference.huggingface.co\', port=443): Max retries exceeded with url: /models/mistralai/Mistral-7B-Instruct-v0.2/v1/chat/completions (Caused by NameResolutionError("HTTPSConnection(host=\'api-inference.huggingface.co\', port=443): Failed to resolve \'api-inference.huggingface.co\' ([Errno 8] nodename nor servname provided, or not known)"))'), '(Request ID: d3d9c1ac-d293-4dd0-b044-e3aa8e5bba3a)')
+2026-07-31 13:01:55,254 [WARNING] agents.analyzer_agent — [Analyzer Agent] LLM call failed: LLM call failed after 3 attempts. Last error: (MaxRetryError('HTTPSConnectionPool(host=\'api-inference.huggingface.co\', port=443): Max retries exceeded with url: /models/mistralai/Mistral-7B-Instruct-v0.2/v1/chat/completions (Caused by NameResolutionError("HTTPSConnection(host=\'api-inference.huggingface.co\', port=443): Failed to resolve \'api-inference.huggingface.co\' ([Errno 8] nodename nor servname provided, or not known)"))'), '(Request ID: d3d9c1ac-d293-4dd0-b044-e3aa8e5bba3a)'). Falling back to rule-based analysis.
+2026-07-31 13:01:55,254 [INFO] agents.analyzer_agent — [Analyzer Agent] Complete — 2 patterns detected, fallback=True
+2026-07-31 13:01:55,255 [INFO] core.pipeline — [Agent 1] Complete — patterns=2, elapsed=4.08s
+2026-07-31 13:01:55,255 [INFO] core.pipeline — [Agent 2] Retrieval Agent
+2026-07-31 13:01:55,255 [INFO] agents.retrieval_agent — [Retrieval Agent] Running — query='SQL Query optimization. SELECT * used — all columns retrieve...'
+2026-07-31 13:01:55,593 [INFO] agents.retrieval_agent — [Retrieval Agent] Retrieved 3 entries from KB.
+2026-07-31 13:01:55,594 [WARNING] core.llm_client — LLM call failed (attempt 1/3): (MaxRetryError('HTTPSConnectionPool(host=\'api-inference.huggingface.co\', port=443): Max retries exceeded with url: /models/mistralai/Mistral-7B-Instruct-v0.2/v1/chat/completions (Caused by NameResolutionError("HTTPSConnection(host=\'api-inference.huggingface.co\', port=443): Failed to resolve \'api-inference.huggingface.co\' ([Errno 8] nodename nor servname provided, or not known)"))'), '(Request ID: 745bdca7-b4b8-425d-b4cd-f7c39c77ea33)')
+2026-07-31 13:01:57,604 [WARNING] core.llm_client — LLM call failed (attempt 2/3): (MaxRetryError('HTTPSConnectionPool(host=\'api-inference.huggingface.co\', port=443): Max retries exceeded with url: /models/mistralai/Mistral-7B-Instruct-v0.2/v1/chat/completions (Caused by NameResolutionError("HTTPSConnection(host=\'api-inference.huggingface.co\', port=443): Failed to resolve \'api-inference.huggingface.co\' ([Errno 8] nodename nor servname provided, or not known)"))'), '(Request ID: da9cd6df-eab3-4003-9bdf-1ce25e3acf2c)')
+2026-07-31 13:01:59,613 [WARNING] core.llm_client — LLM call failed (attempt 3/3): (MaxRetryError('HTTPSConnectionPool(host=\'api-inference.huggingface.co\', port=443): Max retries exceeded with url: /models/mistralai/Mistral-7B-Instruct-v0.2/v1/chat/completions (Caused by NameResolutionError("HTTPSConnection(host=\'api-inference.huggingface.co\', port=443): Failed to resolve \'api-inference.huggingface.co\' ([Errno 8] nodename nor servname provided, or not known)"))'), '(Request ID: 174b11a8-4913-470f-8237-fffe30f92765)')
+2026-07-31 13:01:59,613 [WARNING] agents.retrieval_agent — [Retrieval Agent] LLM selection failed: LLM call failed after 3 attempts. Last error: (MaxRetryError('HTTPSConnectionPool(host=\'api-inference.huggingface.co\', port=443): Max retries exceeded with url: /models/mistralai/Mistral-7B-Instruct-v0.2/v1/chat/completions (Caused by NameResolutionError("HTTPSConnection(host=\'api-inference.huggingface.co\', port=443): Failed to resolve \'api-inference.huggingface.co\' ([Errno 8] nodename nor servname provided, or not known)"))'), '(Request ID: 174b11a8-4913-470f-8237-fffe30f92765)'). Using fallback selection.
+2026-07-31 13:01:59,613 [INFO] agents.retrieval_agent — [Retrieval Agent] Complete — selected=3, fallback=True
+2026-07-31 13:01:59,613 [INFO] core.pipeline — [Agent 2] Complete — selected=3, elapsed=4.36s
+2026-07-31 13:01:59,613 [INFO] core.pipeline — [Agent 3] Reasoning Agent
+2026-07-31 13:01:59,613 [INFO] agents.reasoning_agent — [Reasoning Agent] Running — selected_entries=3, patterns=2
+2026-07-31 13:01:59,615 [WARNING] core.llm_client — LLM call failed (attempt 1/3): (MaxRetryError('HTTPSConnectionPool(host=\'api-inference.huggingface.co\', port=443): Max retries exceeded with url: /models/mistralai/Mistral-7B-Instruct-v0.2/v1/chat/completions (Caused by NameResolutionError("HTTPSConnection(host=\'api-inference.huggingface.co\', port=443): Failed to resolve \'api-inference.huggingface.co\' ([Errno 8] nodename nor servname provided, or not known)"))'), '(Request ID: 0ea2b081-2753-44e8-a7d9-92e79b02ccb0)')
+2026-07-31 13:02:01,625 [WARNING] core.llm_client — LLM call failed (attempt 2/3): (MaxRetryError('HTTPSConnectionPool(host=\'api-inference.huggingface.co\', port=443): Max retries exceeded with url: /models/mistralai/Mistral-7B-Instruct-v0.2/v1/chat/completions (Caused by NameResolutionError("HTTPSConnection(host=\'api-inference.huggingface.co\', port=443): Failed to resolve \'api-inference.huggingface.co\' ([Errno 8] nodename nor servname provided, or not known)"))'), '(Request ID: a2f567f0-4bb8-411e-a8ca-a5337259bd6c)')
+2026-07-31 13:02:03,636 [WARNING] core.llm_client — LLM call failed (attempt 3/3): (MaxRetryError('HTTPSConnectionPool(host=\'api-inference.huggingface.co\', port=443): Max retries exceeded with url: /models/mistralai/Mistral-7B-Instruct-v0.2/v1/chat/completions (Caused by NameResolutionError("HTTPSConnection(host=\'api-inference.huggingface.co\', port=443): Failed to resolve \'api-inference.huggingface.co\' ([Errno 8] nodename nor servname provided, or not known)"))'), '(Request ID: cbd21df1-b3d8-424f-8cfa-184a22051154)')
+2026-07-31 13:02:03,636 [WARNING] agents.reasoning_agent — [Reasoning Agent] LLM call failed: LLM call failed after 3 attempts. Last error: (MaxRetryError('HTTPSConnectionPool(host=\'api-inference.huggingface.co\', port=443): Max retries exceeded with url: /models/mistralai/Mistral-7B-Instruct-v0.2/v1/chat/completions (Caused by NameResolutionError("HTTPSConnection(host=\'api-inference.huggingface.co\', port=443): Failed to resolve \'api-inference.huggingface.co\' ([Errno 8] nodename nor servname provided, or not known)"))'), '(Request ID: cbd21df1-b3d8-424f-8cfa-184a22051154)'). Using fallback reasoning.
+2026-07-31 13:02:03,637 [INFO] agents.reasoning_agent — [Reasoning Agent] Complete — recommendations=3, inapplicable=0, fallback=True
+2026-07-31 13:02:03,637 [INFO] core.pipeline — [Agent 3] Complete — recommendations=3, elapsed=4.02s
+2026-07-31 13:02:03,637 [INFO] core.pipeline — [Agent 4] Recommendation Agent
+2026-07-31 13:02:03,637 [INFO] agents.recommendation_agent — [Recommendation Agent] Running — ranked_recommendations=3
+2026-07-31 13:02:03,640 [WARNING] core.llm_client — LLM call failed (attempt 1/3): (MaxRetryError('HTTPSConnectionPool(host=\'api-inference.huggingface.co\', port=443): Max retries exceeded with url: /models/mistralai/Mistral-7B-Instruct-v0.2/v1/chat/completions (Caused by NameResolutionError("HTTPSConnection(host=\'api-inference.huggingface.co\', port=443): Failed to resolve \'api-inference.huggingface.co\' ([Errno 8] nodename nor servname provided, or not known)"))'), '(Request ID: f00e1529-0bff-4c9c-b765-02eb15297cb8)')
+2026-07-31 13:02:05,647 [WARNING] core.llm_client — LLM call failed (attempt 2/3): (MaxRetryError('HTTPSConnectionPool(host=\'api-inference.huggingface.co\', port=443): Max retries exceeded with url: /models/mistralai/Mistral-7B-Instruct-v0.2/v1/chat/completions (Caused by NameResolutionError("HTTPSConnection(host=\'api-inference.huggingface.co\', port=443): Failed to resolve \'api-inference.huggingface.co\' ([Errno 8] nodename nor servname provided, or not known)"))'), '(Request ID: 48d0f1a0-0b72-4067-9cbc-f16b0f3e4a0b)')
+2026-07-31 13:02:07,658 [WARNING] core.llm_client — LLM call failed (attempt 3/3): (MaxRetryError('HTTPSConnectionPool(host=\'api-inference.huggingface.co\', port=443): Max retries exceeded with url: /models/mistralai/Mistral-7B-Instruct-v0.2/v1/chat/completions (Caused by NameResolutionError("HTTPSConnection(host=\'api-inference.huggingface.co\', port=443): Failed to resolve \'api-inference.huggingface.co\' ([Errno 8] nodename nor servname provided, or not known)"))'), '(Request ID: 473377db-2e13-4ffc-9747-93d633203e80)')
+2026-07-31 13:02:07,658 [WARNING] agents.recommendation_agent — [Recommendation Agent] LLM call failed: LLM call failed after 3 attempts. Last error: (MaxRetryError('HTTPSConnectionPool(host=\'api-inference.huggingface.co\', port=443): Max retries exceeded with url: /models/mistralai/Mistral-7B-Instruct-v0.2/v1/chat/completions (Caused by NameResolutionError("HTTPSConnection(host=\'api-inference.huggingface.co\', port=443): Failed to resolve \'api-inference.huggingface.co\' ([Errno 8] nodename nor servname provided, or not known)"))'), '(Request ID: 473377db-2e13-4ffc-9747-93d633203e80)'). Using fallback report generation.
+2026-07-31 13:02:07,658 [INFO] agents.recommendation_agent — [Recommendation Agent] Complete — recommendations=3, fallback=True
+2026-07-31 13:02:07,658 [INFO] core.pipeline — [Agent 4] Complete — elapsed=4.02s
+2026-07-31 13:02:07,658 [INFO] core.pipeline — Pipeline run complete — total_elapsed=16.48s, recommendations=3
+2026-07-31 13:04:42,718 [INFO] core.pipeline — ============================================================
+2026-07-31 13:04:42,718 [INFO] core.pipeline — Initializing Pipeline...
+2026-07-31 13:04:42,718 [INFO] core.pipeline — ============================================================
+2026-07-31 13:04:42,718 [INFO] core.pipeline — Loading LLM client...
+2026-07-31 13:04:42,848 [INFO] core.llm_client — LLMClient initialized — provider=huggingface, model=mistralai/Mistral-7B-Instruct-v0.2
+2026-07-31 13:04:42,848 [INFO] core.pipeline — Loading knowledge base...
+2026-07-31 13:04:44,031 [INFO] faiss.loader — Loading faiss.
+2026-07-31 13:04:44,041 [INFO] faiss.loader — Successfully loaded faiss.
+2026-07-31 13:04:44,044 [INFO] sentence_transformers.SentenceTransformer — Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2026-07-31 13:04:46,683 [INFO] sentence_transformers.SentenceTransformer — Use pytorch device_name: mps
+2026-07-31 13:04:46,952 [INFO] core.pipeline — Pipeline ready.
+2026-07-31 13:04:46,952 [INFO] core.pipeline — ============================================================
+2026-07-31 13:04:46,952 [INFO] core.pipeline — Pipeline run started
+2026-07-31 13:04:46,952 [INFO] core.pipeline — ============================================================
+2026-07-31 13:04:46,952 [INFO] core.pipeline — [Stage 2.1] Ingestion & Preprocessing
+2026-07-31 13:04:46,953 [INFO] core.ingestion — Input type detected: SQL Query (scores: {'SQL Query': 3, 'ETL Workflow': 0, 'Metadata': 0, 'Pipeline Log': 0})
+2026-07-31 13:04:46,953 [INFO] core.ingestion — Ingestion complete — type=SQL Query, chars=44, lines=1
+2026-07-31 13:04:46,953 [INFO] core.pipeline — [Stage 2.1] Complete — type=SQL Query, elapsed=0.00s
+2026-07-31 13:04:46,953 [INFO] core.pipeline — [Agent 1] Analyzer Agent
+2026-07-31 13:04:46,953 [INFO] agents.analyzer_agent — [Analyzer Agent] Running on input_type=SQL Query
+2026-07-31 13:04:46,999 [WARNING] core.llm_client — LLM call failed (attempt 1/3): (MaxRetryError('HTTPSConnectionPool(host=\'api-inference.huggingface.co\', port=443): Max retries exceeded with url: /models/mistralai/Mistral-7B-Instruct-v0.2/v1/chat/completions (Caused by NameResolutionError("HTTPSConnection(host=\'api-inference.huggingface.co\', port=443): Failed to resolve \'api-inference.huggingface.co\' ([Errno 8] nodename nor servname provided, or not known)"))'), '(Request ID: c61661b5-1105-4670-88f1-ff5cffc55d22)')
+2026-07-31 13:04:49,009 [WARNING] core.llm_client — LLM call failed (attempt 2/3): (MaxRetryError('HTTPSConnectionPool(host=\'api-inference.huggingface.co\', port=443): Max retries exceeded with url: /models/mistralai/Mistral-7B-Instruct-v0.2/v1/chat/completions (Caused by NameResolutionError("HTTPSConnection(host=\'api-inference.huggingface.co\', port=443): Failed to resolve \'api-inference.huggingface.co\' ([Errno 8] nodename nor servname provided, or not known)"))'), '(Request ID: fc230ddd-e1bc-4c78-9dfa-82816c7c5d5f)')
+2026-07-31 13:04:51,020 [WARNING] core.llm_client — LLM call failed (attempt 3/3): (MaxRetryError('HTTPSConnectionPool(host=\'api-inference.huggingface.co\', port=443): Max retries exceeded with url: /models/mistralai/Mistral-7B-Instruct-v0.2/v1/chat/completions (Caused by NameResolutionError("HTTPSConnection(host=\'api-inference.huggingface.co\', port=443): Failed to resolve \'api-inference.huggingface.co\' ([Errno 8] nodename nor servname provided, or not known)"))'), '(Request ID: ab1b01f2-c969-4f3d-8340-6bc8ee895068)')
+2026-07-31 13:04:51,020 [WARNING] agents.analyzer_agent — [Analyzer Agent] LLM call failed: LLM call failed after 3 attempts. Last error: (MaxRetryError('HTTPSConnectionPool(host=\'api-inference.huggingface.co\', port=443): Max retries exceeded with url: /models/mistralai/Mistral-7B-Instruct-v0.2/v1/chat/completions (Caused by NameResolutionError("HTTPSConnection(host=\'api-inference.huggingface.co\', port=443): Failed to resolve \'api-inference.huggingface.co\' ([Errno 8] nodename nor servname provided, or not known)"))'), '(Request ID: ab1b01f2-c969-4f3d-8340-6bc8ee895068)'). Falling back to rule-based analysis.
+2026-07-31 13:04:51,020 [INFO] agents.analyzer_agent — [Analyzer Agent] Complete — 1 patterns detected, fallback=True
+2026-07-31 13:04:51,020 [INFO] core.pipeline — [Agent 1] Complete — patterns=1, elapsed=4.07s
+2026-07-31 13:04:51,020 [INFO] core.pipeline — [Agent 2] Retrieval Agent
+2026-07-31 13:04:51,020 [INFO] agents.retrieval_agent — [Retrieval Agent] Running — query='SQL Query optimization. SELECT * used — all columns retrieve...'
+2026-07-31 13:04:51,357 [INFO] agents.retrieval_agent — [Retrieval Agent] Retrieved 3 entries from KB.
+2026-07-31 13:04:51,359 [WARNING] core.llm_client — LLM call failed (attempt 1/3): (MaxRetryError('HTTPSConnectionPool(host=\'api-inference.huggingface.co\', port=443): Max retries exceeded with url: /models/mistralai/Mistral-7B-Instruct-v0.2/v1/chat/completions (Caused by NameResolutionError("HTTPSConnection(host=\'api-inference.huggingface.co\', port=443): Failed to resolve \'api-inference.huggingface.co\' ([Errno 8] nodename nor servname provided, or not known)"))'), '(Request ID: 550f5d70-62bc-4889-bcdf-09a17892a196)')
+2026-07-31 13:04:53,370 [WARNING] core.llm_client — LLM call failed (attempt 2/3): (MaxRetryError('HTTPSConnectionPool(host=\'api-inference.huggingface.co\', port=443): Max retries exceeded with url: /models/mistralai/Mistral-7B-Instruct-v0.2/v1/chat/completions (Caused by NameResolutionError("HTTPSConnection(host=\'api-inference.huggingface.co\', port=443): Failed to resolve \'api-inference.huggingface.co\' ([Errno 8] nodename nor servname provided, or not known)"))'), '(Request ID: ec0360be-7260-4d5f-8806-aef6ef0ae0c0)')
+2026-07-31 13:04:55,376 [WARNING] core.llm_client — LLM call failed (attempt 3/3): (MaxRetryError('HTTPSConnectionPool(host=\'api-inference.huggingface.co\', port=443): Max retries exceeded with url: /models/mistralai/Mistral-7B-Instruct-v0.2/v1/chat/completions (Caused by NameResolutionError("HTTPSConnection(host=\'api-inference.huggingface.co\', port=443): Failed to resolve \'api-inference.huggingface.co\' ([Errno 8] nodename nor servname provided, or not known)"))'), '(Request ID: de4db9b1-3d5c-4410-86d7-1e5a238b45f4)')
+2026-07-31 13:04:55,376 [WARNING] agents.retrieval_agent — [Retrieval Agent] LLM selection failed: LLM call failed after 3 attempts. Last error: (MaxRetryError('HTTPSConnectionPool(host=\'api-inference.huggingface.co\', port=443): Max retries exceeded with url: /models/mistralai/Mistral-7B-Instruct-v0.2/v1/chat/completions (Caused by NameResolutionError("HTTPSConnection(host=\'api-inference.huggingface.co\', port=443): Failed to resolve \'api-inference.huggingface.co\' ([Errno 8] nodename nor servname provided, or not known)"))'), '(Request ID: de4db9b1-3d5c-4410-86d7-1e5a238b45f4)'). Using fallback selection.
+2026-07-31 13:04:55,376 [INFO] agents.retrieval_agent — [Retrieval Agent] Complete — selected=3, fallback=True
+2026-07-31 13:04:55,376 [INFO] core.pipeline — [Agent 2] Complete — selected=3, elapsed=4.36s
+2026-07-31 13:04:55,376 [INFO] core.pipeline — [Agent 3] Reasoning Agent
+2026-07-31 13:04:55,376 [INFO] agents.reasoning_agent — [Reasoning Agent] Running — selected_entries=3, patterns=1
+2026-07-31 13:04:55,380 [WARNING] core.llm_client — LLM call failed (attempt 1/3): (MaxRetryError('HTTPSConnectionPool(host=\'api-inference.huggingface.co\', port=443): Max retries exceeded with url: /models/mistralai/Mistral-7B-Instruct-v0.2/v1/chat/completions (Caused by NameResolutionError("HTTPSConnection(host=\'api-inference.huggingface.co\', port=443): Failed to resolve \'api-inference.huggingface.co\' ([Errno 8] nodename nor servname provided, or not known)"))'), '(Request ID: ad34d4bf-ebe6-4420-8608-af6929108090)')
+2026-07-31 13:04:57,390 [WARNING] core.llm_client — LLM call failed (attempt 2/3): (MaxRetryError('HTTPSConnectionPool(host=\'api-inference.huggingface.co\', port=443): Max retries exceeded with url: /models/mistralai/Mistral-7B-Instruct-v0.2/v1/chat/completions (Caused by NameResolutionError("HTTPSConnection(host=\'api-inference.huggingface.co\', port=443): Failed to resolve \'api-inference.huggingface.co\' ([Errno 8] nodename nor servname provided, or not known)"))'), '(Request ID: 21eaa1c8-e82e-4f6d-b1c2-8ee13bfbd9ce)')
+2026-07-31 13:04:59,398 [WARNING] core.llm_client — LLM call failed (attempt 3/3): (MaxRetryError('HTTPSConnectionPool(host=\'api-inference.huggingface.co\', port=443): Max retries exceeded with url: /models/mistralai/Mistral-7B-Instruct-v0.2/v1/chat/completions (Caused by NameResolutionError("HTTPSConnection(host=\'api-inference.huggingface.co\', port=443): Failed to resolve \'api-inference.huggingface.co\' ([Errno 8] nodename nor servname provided, or not known)"))'), '(Request ID: b5d8eeff-99ae-4207-8c92-c7b76a879d8b)')
+2026-07-31 13:04:59,398 [WARNING] agents.reasoning_agent — [Reasoning Agent] LLM call failed: LLM call failed after 3 attempts. Last error: (MaxRetryError('HTTPSConnectionPool(host=\'api-inference.huggingface.co\', port=443): Max retries exceeded with url: /models/mistralai/Mistral-7B-Instruct-v0.2/v1/chat/completions (Caused by NameResolutionError("HTTPSConnection(host=\'api-inference.huggingface.co\', port=443): Failed to resolve \'api-inference.huggingface.co\' ([Errno 8] nodename nor servname provided, or not known)"))'), '(Request ID: b5d8eeff-99ae-4207-8c92-c7b76a879d8b)'). Using fallback reasoning.
+2026-07-31 13:04:59,398 [INFO] agents.reasoning_agent — [Reasoning Agent] Complete — recommendations=3, inapplicable=0, fallback=True
+2026-07-31 13:04:59,399 [INFO] core.pipeline — [Agent 3] Complete — recommendations=3, elapsed=4.02s
+2026-07-31 13:04:59,399 [INFO] core.pipeline — [Agent 4] Recommendation Agent
+2026-07-31 13:04:59,399 [INFO] agents.recommendation_agent — [Recommendation Agent] Running — ranked_recommendations=3
+2026-07-31 13:04:59,402 [WARNING] core.llm_client — LLM call failed (attempt 1/3): (MaxRetryError('HTTPSConnectionPool(host=\'api-inference.huggingface.co\', port=443): Max retries exceeded with url: /models/mistralai/Mistral-7B-Instruct-v0.2/v1/chat/completions (Caused by NameResolutionError("HTTPSConnection(host=\'api-inference.huggingface.co\', port=443): Failed to resolve \'api-inference.huggingface.co\' ([Errno 8] nodename nor servname provided, or not known)"))'), '(Request ID: 64dc4b6d-90c9-497c-a1d6-e6071ecb3384)')
+2026-07-31 13:05:01,406 [WARNING] core.llm_client — LLM call failed (attempt 2/3): (MaxRetryError('HTTPSConnectionPool(host=\'api-inference.huggingface.co\', port=443): Max retries exceeded with url: /models/mistralai/Mistral-7B-Instruct-v0.2/v1/chat/completions (Caused by NameResolutionError("HTTPSConnection(host=\'api-inference.huggingface.co\', port=443): Failed to resolve \'api-inference.huggingface.co\' ([Errno 8] nodename nor servname provided, or not known)"))'), '(Request ID: 4fadf2be-75d6-4fe1-a675-b45800fd8733)')
+2026-07-31 13:05:03,417 [WARNING] core.llm_client — LLM call failed (attempt 3/3): (MaxRetryError('HTTPSConnectionPool(host=\'api-inference.huggingface.co\', port=443): Max retries exceeded with url: /models/mistralai/Mistral-7B-Instruct-v0.2/v1/chat/completions (Caused by NameResolutionError("HTTPSConnection(host=\'api-inference.huggingface.co\', port=443): Failed to resolve \'api-inference.huggingface.co\' ([Errno 8] nodename nor servname provided, or not known)"))'), '(Request ID: 6139deb6-ff4d-4957-9191-946784d152cc)')
+2026-07-31 13:05:03,417 [WARNING] agents.recommendation_agent — [Recommendation Agent] LLM call failed: LLM call failed after 3 attempts. Last error: (MaxRetryError('HTTPSConnectionPool(host=\'api-inference.huggingface.co\', port=443): Max retries exceeded with url: /models/mistralai/Mistral-7B-Instruct-v0.2/v1/chat/completions (Caused by NameResolutionError("HTTPSConnection(host=\'api-inference.huggingface.co\', port=443): Failed to resolve \'api-inference.huggingface.co\' ([Errno 8] nodename nor servname provided, or not known)"))'), '(Request ID: 6139deb6-ff4d-4957-9191-946784d152cc)'). Using fallback report generation.
+2026-07-31 13:05:03,418 [INFO] agents.recommendation_agent — [Recommendation Agent] Complete — recommendations=3, fallback=True
+2026-07-31 13:05:03,418 [INFO] core.pipeline — [Agent 4] Complete — elapsed=4.02s
+2026-07-31 13:05:03,418 [INFO] core.pipeline — Pipeline run complete — total_elapsed=16.47s, recommendations=3
+2026-07-31 13:11:52,891 [INFO] core.pipeline — ============================================================
+2026-07-31 13:11:52,891 [INFO] core.pipeline — Initializing Pipeline...
+2026-07-31 13:11:52,892 [INFO] core.pipeline — ============================================================
+2026-07-31 13:11:52,892 [INFO] core.pipeline — Loading LLM client...
+2026-07-31 13:11:53,119 [INFO] core.llm_client — LLMClient initialized — provider=huggingface, model=mistralai/Mistral-7B-Instruct-v0.2
+2026-07-31 13:11:53,119 [INFO] core.pipeline — Loading knowledge base...
+2026-07-31 13:12:19,663 [INFO] core.pipeline — ============================================================
+2026-07-31 13:12:19,663 [INFO] core.pipeline — Initializing Pipeline...
+2026-07-31 13:12:19,663 [INFO] core.pipeline — ============================================================
+2026-07-31 13:12:19,663 [INFO] core.pipeline — Loading LLM client...
+2026-07-31 13:12:19,770 [INFO] core.llm_client — LLMClient initialized — provider=huggingface, model=mistralai/Mistral-7B-Instruct-v0.2
+2026-07-31 13:12:19,770 [INFO] core.pipeline — Loading knowledge base...
+2026-07-31 13:12:20,986 [INFO] faiss.loader — Loading faiss.
+2026-07-31 13:12:21,005 [INFO] faiss.loader — Successfully loaded faiss.
+2026-07-31 13:12:21,008 [INFO] sentence_transformers.SentenceTransformer — Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2026-07-31 13:12:23,669 [INFO] sentence_transformers.SentenceTransformer — Use pytorch device_name: mps
+2026-07-31 13:12:23,889 [INFO] core.pipeline — Pipeline ready.
+2026-07-31 13:12:23,889 [INFO] core.pipeline — ============================================================
+2026-07-31 13:12:23,889 [INFO] core.pipeline — Pipeline run started
+2026-07-31 13:12:23,889 [INFO] core.pipeline — ============================================================
+2026-07-31 13:12:23,889 [INFO] core.pipeline — [Stage 2.1] Ingestion & Preprocessing
+2026-07-31 13:12:23,890 [INFO] core.ingestion — Input type detected: SQL Query (scores: {'SQL Query': 3, 'ETL Workflow': 0, 'Metadata': 0, 'Pipeline Log': 0})
+2026-07-31 13:12:23,890 [INFO] core.ingestion — Ingestion complete — type=SQL Query, chars=44, lines=1
+2026-07-31 13:12:23,890 [INFO] core.pipeline — [Stage 2.1] Complete — type=SQL Query, elapsed=0.00s
+2026-07-31 13:12:23,890 [INFO] core.pipeline — [Agent 1] Analyzer Agent
+2026-07-31 13:12:23,890 [INFO] agents.analyzer_agent — [Analyzer Agent] Running on input_type=SQL Query
+2026-07-31 13:12:31,389 [INFO] agents.analyzer_agent — [Analyzer Agent] Complete — 1 patterns detected, fallback=False
+2026-07-31 13:12:31,389 [INFO] core.pipeline — [Agent 1] Complete — patterns=1, elapsed=7.50s
+2026-07-31 13:12:31,389 [INFO] core.pipeline — [Agent 2] Retrieval Agent
+2026-07-31 13:12:31,390 [INFO] agents.retrieval_agent — [Retrieval Agent] Running — query='SQL query using SELECT * which can lead to unnecessary data ...'
+2026-07-31 13:12:31,849 [INFO] agents.retrieval_agent — [Retrieval Agent] Few results with category filter — retrying without filter.
+2026-07-31 13:12:31,856 [INFO] agents.retrieval_agent — [Retrieval Agent] Retrieved 1 entries from KB.
+2026-07-31 13:12:36,509 [INFO] agents.retrieval_agent — [Retrieval Agent] Complete — selected=1, fallback=False
+2026-07-31 13:12:36,509 [INFO] core.pipeline — [Agent 2] Complete — selected=1, elapsed=5.12s
+2026-07-31 13:12:36,509 [INFO] core.pipeline — [Agent 3] Reasoning Agent
+2026-07-31 13:12:36,509 [INFO] agents.reasoning_agent — [Reasoning Agent] Running — selected_entries=1, patterns=1
+2026-07-31 13:12:39,598 [INFO] agents.reasoning_agent — [Reasoning Agent] Complete — recommendations=1, inapplicable=0, fallback=False
+2026-07-31 13:12:39,599 [INFO] core.pipeline — [Agent 3] Complete — recommendations=1, elapsed=3.09s
+2026-07-31 13:12:39,599 [INFO] core.pipeline — [Agent 4] Recommendation Agent
+2026-07-31 13:12:39,599 [INFO] agents.recommendation_agent — [Recommendation Agent] Running — ranked_recommendations=1
+2026-07-31 13:12:43,466 [INFO] agents.recommendation_agent — [Recommendation Agent] Complete — recommendations=1, fallback=False
+2026-07-31 13:12:43,466 [INFO] core.pipeline — [Agent 4] Complete — elapsed=3.87s
+2026-07-31 13:12:43,466 [INFO] core.pipeline — Pipeline run complete — total_elapsed=19.58s, recommendations=1

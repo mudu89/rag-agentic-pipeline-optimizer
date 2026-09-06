@@ -1,0 +1,39 @@
+{
+  "_comment": "Manual curation, analogous to Layer 1 KB entry taxonomy assignment. Keys are the .txt filename as produced by preprocess_documents.py (documents/processed/) — NOT the raw .html filename. category and subcategory must use exact values from kb_taxonomy_v1.json. input_type must be one of the input_type enum values in kb_schema_v1.json.",
+
+  "apache_airflow_best_practices.txt": {
+    "category": "Workflow Execution Optimization",
+    "subcategory": "Scheduling Optimization",
+    "input_type": "Pipeline Log",
+    "source_type": "official_documentation",
+    "source_url": "https://airflow.apache.org/docs/apache-airflow/stable/best-practices.html"
+  },
+  "spark_performance_tuning_guide.txt": {
+    "category": "ETL Optimization",
+    "subcategory": "Shuffle Minimization",
+    "input_type": "ETL Workflow",
+    "source_type": "official_documentation",
+    "source_url": "https://spark.apache.org/docs/latest/sql-performance-tuning.html"
+  },
+  "bigquery_sql_best_practices.txt": {
+    "category": "Partitioning Strategy",
+    "subcategory": "Partition Pruning",
+    "input_type": "SQL Query",
+    "source_type": "official_documentation",
+    "source_url": "https://docs.cloud.google.com/bigquery/docs/best-practices-performance-overview"
+  },
+  "postgresql_indexing_guide.txt": {
+    "category": "Indexing Strategy",
+    "subcategory": "Index Selection",
+    "input_type": "Metadata",
+    "source_type": "official_documentation",
+    "source_url": "https://www.postgresql.org/docs/current/indexes.html"
+  },
+  "databricks_delta_lake_guide.txt": {
+    "category": "Caching Strategy",
+    "subcategory": "Materialized View Usage",
+    "input_type": "ETL Workflow",
+    "source_type": "official_documentation",
+    "source_url": "https://docs.databricks.com/aws/en/delta/best-practices"
+  }
+}

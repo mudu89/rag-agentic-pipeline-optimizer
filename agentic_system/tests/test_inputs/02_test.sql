@@ -1,0 +1,16 @@
+/*
+Predicate pushdown.
+Replace YEAR(REPORTDATE) with a date range.
+Remove UPPER() if data is normalized.
+Project only required columns.
+Filter PERSON and WORK_ORDER before joining.
+ */
+
+SELECT *
+FROM UDX_CORE.UDX_MAXIMO.WORK_ORDER WO
+JOIN UDX_CORE.UDX_MAXIMO.WORK_LOG WL
+    ON WO.WORKORDERID = WL.WORKORDERID
+JOIN UDX_CORE.UDX_MAXIMO.PERSON P
+    ON WO.OWNER = P.PERSONID
+WHERE UPPER(P.STATUS) = 'ACTIVE'
+AND YEAR(WO.REPORTDATE) = 2026;

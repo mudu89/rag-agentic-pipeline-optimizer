@@ -1,0 +1,128 @@
+{
+  "_taxonomy_meta": {
+    "schema_name": "Knowledge Base — Optimization Taxonomy",
+    "version": "1.0",
+    "project": "Intelligent Optimization of Data Pipelines using RAG-Based Knowledge Retrieval and Agentic Decision Systems",
+    "author": "Mohammed Mudassirullah Sheriff",
+    "institution": "BITS Pilani WILP — M.Tech Data Science & Engineering",
+    "created_date": "2026-05-15",
+    "description": "Defines the complete category and subcategory taxonomy for Layer 1 of the knowledge base. The category and subcategory fields in every kb_entry must use values from this taxonomy exactly.",
+    "total_categories": 7,
+    "total_subcategories": 32,
+    "target_layer1_entries": "68–88 (within 50–100 scope)"
+  },
+
+  "taxonomy": [
+    {
+      "category_id": "1",
+      "category_name": "SQL Optimization",
+      "primary_input_type": "SQL Query",
+      "target_entries": "20–25",
+      "rationale": "Highest input frequency; most query-driven optimization patterns",
+      "subcategories": [
+        { "subcategory_id": "1.1", "subcategory_name": "Column Projection",              "description": "Avoiding SELECT *, selecting only required columns to reduce I/O and memory" },
+        { "subcategory_id": "1.2", "subcategory_name": "Predicate Pushdown",             "description": "Pushing WHERE filters as early as possible in the execution plan" },
+        { "subcategory_id": "1.3", "subcategory_name": "Join Optimization",              "description": "Join ordering, join types (broadcast vs shuffle), eliminating cartesian joins" },
+        { "subcategory_id": "1.4", "subcategory_name": "Subquery Optimization",          "description": "Replacing correlated subqueries with joins or CTEs for better performance" },
+        { "subcategory_id": "1.5", "subcategory_name": "Aggregation Optimization",       "description": "Pre-aggregation, partial aggregation, avoiding redundant GROUP BY operations" },
+        { "subcategory_id": "1.6", "subcategory_name": "Query Rewrite Patterns",         "description": "EXISTS vs IN, UNION vs UNION ALL, NOT IN vs NOT EXISTS vs LEFT JOIN rewrites" },
+        { "subcategory_id": "1.7", "subcategory_name": "Filter Optimization",            "description": "Avoiding functions on indexed columns, writing SARGable predicates" },
+        { "subcategory_id": "1.8", "subcategory_name": "Scan Reduction",                 "description": "Avoiding repeated full table scans, materializing intermediate results" }
+      ]
+    },
+    {
+      "category_id": "2",
+      "category_name": "ETL & Pipeline Optimization",
+      "primary_input_type": "ETL Workflow",
+      "target_entries": "15–20",
+      "rationale": "Core to Comcast data engineering context; DAG and YAML workflow patterns",
+      "subcategories": [
+        { "subcategory_id": "2.1", "subcategory_name": "Redundant Transformation Elimination", "description": "Removing duplicate or unnecessary transformation steps in ETL pipelines" },
+        { "subcategory_id": "2.2", "subcategory_name": "Task Dependency Optimization",         "description": "Parallelizing independent tasks, reducing critical path length in DAGs" },
+        { "subcategory_id": "2.3", "subcategory_name": "Data Skew Handling",                   "description": "Salting, repartitioning, skew join strategies for uneven data distribution" },
+        { "subcategory_id": "2.4", "subcategory_name": "Shuffle Minimization",                 "description": "Reducing cross-node data movement in distributed pipeline execution" },
+        { "subcategory_id": "2.5", "subcategory_name": "Pipeline Modularization",              "description": "Breaking monolithic pipelines into reusable, independently testable units" },
+        { "subcategory_id": "2.6", "subcategory_name": "Incremental Processing",               "description": "Replacing full reloads with incremental or delta processing patterns" }
+      ]
+    },
+    {
+      "category_id": "3",
+      "category_name": "Indexing Strategy",
+      "primary_input_type": "Metadata",
+      "target_entries": "8–10",
+      "rationale": "High impact on query performance; driven by schema and statistics metadata",
+      "subcategories": [
+        { "subcategory_id": "3.1", "subcategory_name": "Index Selection",                  "description": "Choosing the right index type: B-tree, Hash, Bitmap, Composite" },
+        { "subcategory_id": "3.2", "subcategory_name": "Missing Index Detection",          "description": "Identifying columns that would benefit from indexing based on query patterns" },
+        { "subcategory_id": "3.3", "subcategory_name": "Index Overuse",                    "description": "Removing redundant or unused indexes that slow down write operations" },
+        { "subcategory_id": "3.4", "subcategory_name": "Columnar & Bloom Filter Indexing", "description": "Parquet/ORC column statistics and bloom filters for selective scan optimization" }
+      ]
+    },
+    {
+      "category_id": "4",
+      "category_name": "Partitioning Strategy",
+      "primary_input_type": "Metadata",
+      "target_entries": "8–10",
+      "rationale": "High impact on large-scale table scan performance; key for distributed systems",
+      "subcategories": [
+        { "subcategory_id": "4.1", "subcategory_name": "Partition Key Selection",  "description": "Choosing effective partition columns such as date, region, or category" },
+        { "subcategory_id": "4.2", "subcategory_name": "Partition Pruning",        "description": "Ensuring queries are written to leverage partition elimination at scan time" },
+        { "subcategory_id": "4.3", "subcategory_name": "Over-Partitioning",        "description": "Avoiding too many small partitions — the small file problem in distributed storage" },
+        { "subcategory_id": "4.4", "subcategory_name": "Dynamic Partitioning",     "description": "Efficient dynamic partition insertion patterns in ETL workflows" }
+      ]
+    },
+    {
+      "category_id": "5",
+      "category_name": "Caching Strategy",
+      "primary_input_type": "ETL Workflow",
+      "target_entries": "6–8",
+      "rationale": "Overlaps SQL and ETL; reduces redundant computation and I/O significantly",
+      "subcategories": [
+        { "subcategory_id": "5.1", "subcategory_name": "Intermediate Result Caching",  "description": "Caching repeated intermediate DataFrames or query results within a pipeline run" },
+        { "subcategory_id": "5.2", "subcategory_name": "Materialized View Usage",      "description": "When to use materialized views vs live queries for repeated aggregation patterns" },
+        { "subcategory_id": "5.3", "subcategory_name": "Broadcast Variable Caching",   "description": "Caching small lookup tables as broadcast variables in Spark to avoid shuffles" },
+        { "subcategory_id": "5.4", "subcategory_name": "Query Result Caching",         "description": "Engine-level result caching in BigQuery, Redshift, and Trino" }
+      ]
+    },
+    {
+      "category_id": "6",
+      "category_name": "Workflow Execution Optimization",
+      "primary_input_type": "Pipeline Log",
+      "target_entries": "6–8",
+      "rationale": "Log-driven analysis; good variety for evaluation experiments",
+      "subcategories": [
+        { "subcategory_id": "6.1", "subcategory_name": "Resource Allocation",       "description": "Executor sizing, memory configuration, and parallelism tuning for pipeline jobs" },
+        { "subcategory_id": "6.2", "subcategory_name": "Retry & Failure Handling",  "description": "Optimizing retry logic, timeout configuration, and failure isolation strategies" },
+        { "subcategory_id": "6.3", "subcategory_name": "Scheduling Optimization",   "description": "Avoiding scheduling conflicts and optimizing DAG trigger timing in Airflow" },
+        { "subcategory_id": "6.4", "subcategory_name": "Bottleneck Detection",       "description": "Identifying long-running tasks and slow operators from execution log analysis" }
+      ]
+    },
+    {
+      "category_id": "7",
+      "category_name": "Data Storage Optimization",
+      "primary_input_type": "Metadata",
+      "target_entries": "5–7",
+      "rationale": "Metadata-driven; rounds out coverage of storage-layer inefficiencies",
+      "subcategories": [
+        { "subcategory_id": "7.1", "subcategory_name": "File Format Selection",      "description": "Parquet vs ORC vs Avro vs CSV — guidance on when to use each format" },
+        { "subcategory_id": "7.2", "subcategory_name": "Compression Strategy",       "description": "Snappy vs GZIP vs ZSTD — trade-offs for read-heavy vs write-heavy workloads" },
+        { "subcategory_id": "7.3", "subcategory_name": "Small File Problem",          "description": "Compaction strategies using coalesce and repartition to reduce small file overhead" },
+        { "subcategory_id": "7.4", "subcategory_name": "Data Layout Optimization",   "description": "Clustering, sorting, and Z-ordering techniques for scan efficiency" }
+      ]
+    }
+  ],
+
+  "_hld_coverage_check": {
+    "description": "Confirms all example optimizations listed on the HLD diagram are covered by this taxonomy",
+    "mappings": [
+      { "hld_output": "Rewrite query to reduce nested subqueries or cartesian joins", "taxonomy": ["1.4 Subquery Optimization", "1.3 Join Optimization"] },
+      { "hld_output": "Add or modify indexes",                                        "taxonomy": ["3.1 Index Selection", "3.2 Missing Index Detection"] },
+      { "hld_output": "Partition large tables",                                       "taxonomy": ["4.1 Partition Key Selection", "4.2 Partition Pruning"] },
+      { "hld_output": "Cache intermediate results",                                   "taxonomy": ["5.1 Intermediate Result Caching"] },
+      { "hld_output": "Remove redundant transformations in ETL",                      "taxonomy": ["2.1 Redundant Transformation Elimination"] },
+      { "hld_output": "Change join order / use broadcast join",                       "taxonomy": ["1.3 Join Optimization", "5.3 Broadcast Variable Caching"] },
+      { "hld_output": "Use materialized views",                                       "taxonomy": ["5.2 Materialized View Usage"] }
+    ],
+    "status": "All HLD example outputs covered"
+  }
+}

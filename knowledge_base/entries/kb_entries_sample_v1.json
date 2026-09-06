@@ -1,0 +1,372 @@
+{
+  "_entries_meta": {
+    "file_name": "kb_entries_sample_v1.json",
+    "version": "1.0",
+    "description": "10 sample structured knowledge entries for Layer 1 of the knowledge base. All entries conform to kb_schema_v1.json. These serve as curation templates and retrieval validation test cases.",
+    "author": "Mohammed Mudassirullah Sheriff",
+    "created_date": "2026-05-15",
+    "total_entries": 10,
+    "categories_covered": [
+      "SQL Optimization",
+      "ETL & Pipeline Optimization",
+      "Indexing Strategy",
+      "Partitioning Strategy",
+      "Caching Strategy",
+      "Workflow Execution Optimization"
+    ]
+  },
+
+  "entries": [
+
+    {
+      "entry_id": "KB-SQL-001",
+      "title": "Avoid SELECT * in large table queries",
+      "category": "SQL Optimization",
+      "subcategory": "Column Projection",
+      "problem_description": "Using SELECT * retrieves all columns from a table regardless of downstream need, causing unnecessary I/O, increased memory consumption, and preventing columnar storage optimizations such as column pruning.",
+      "root_cause": "Developer convenience during prototyping; lack of schema awareness at query-writing time; absence of a query review or linting process.",
+      "optimization_strategy": "Replace SELECT * with an explicit list of only the columns required by the downstream consumer or transformation step.",
+      "before_example": "SELECT * FROM orders WHERE status = 'active';",
+      "after_example": "SELECT order_id, customer_id, status, created_at FROM orders WHERE status = 'active';",
+      "explanation": "Columnar storage engines such as Spark, BigQuery, and Hive ORC read only the columns explicitly requested. Specifying columns enables column pruning at the storage layer, reduces bytes scanned, lowers executor memory pressure, and decreases shuffle costs in distributed environments. In wide tables with 50+ columns, this can eliminate 80–90% of I/O.",
+      "expected_impact": {
+        "execution_time": "10–40% reduction depending on table width and storage format",
+        "cost": "Medium reduction in cloud scan costs (BigQuery, Redshift)",
+        "memory": "Proportional reduction based on number of columns eliminated"
+      },
+      "applicability_conditions": [
+        "Wide tables with 20 or more columns",
+        "Columnar storage formats such as Parquet or ORC",
+        "OLAP and analytical workloads",
+        "Spark, BigQuery, Hive, Trino environments"
+      ],
+      "tags": ["SELECT *", "column pruning", "I/O optimization", "query rewrite", "columnar storage", "wide table"],
+      "platform": ["Spark", "Hive", "BigQuery", "PostgreSQL", "Trino", "Redshift"],
+      "input_type": "SQL Query",
+      "severity": "High",
+      "source": "AWS Data Engineering Best Practices Guide",
+      "embedding_text": "Avoid SELECT * in large table queries. SELECT * retrieves all columns causing unnecessary I/O and memory usage. Replace SELECT * with explicit column list. SELECT * column pruning I/O optimization query rewrite columnar storage wide table.",
+      "confidence_score": 0.95,
+      "related_entries": ["KB-SQL-003", "KB-IDX-001"],
+      "notes": "Less impactful on narrow tables with fewer than 5 columns, or on row-store engines for small point-lookup queries.",
+      "created_date": "2026-05-15",
+      "version": "1.0"
+    },
+
+    {
+      "entry_id": "KB-SQL-002",
+      "title": "Use broadcast join for small lookup table joins",
+      "category": "SQL Optimization",
+      "subcategory": "Join Optimization",
+      "problem_description": "Joining a large fact table with a small lookup or dimension table using a default shuffle join causes unnecessary cross-network data movement, increasing execution time and resource consumption.",
+      "root_cause": "Default query planner treats all joins as shuffle joins unless explicitly hinted or auto-broadcast thresholds are configured. Small table size is not always detected automatically.",
+      "optimization_strategy": "Use a broadcast join hint to replicate the small table to all executors, eliminating the shuffle phase entirely.",
+      "before_example": "SELECT f.order_id, d.region_name FROM fact_orders f JOIN dim_region d ON f.region_id = d.region_id;",
+      "after_example": "SELECT /*+ BROADCAST(d) */ f.order_id, d.region_name FROM fact_orders f JOIN dim_region d ON f.region_id = d.region_id;",
+      "explanation": "In a shuffle join, both tables are repartitioned across all nodes by the join key, generating large network I/O. When one table is small enough to fit in executor memory (typically under 10MB–200MB depending on configuration), broadcasting it to every executor eliminates the shuffle entirely. This is one of the highest-impact single query optimizations in Spark workloads.",
+      "expected_impact": {
+        "execution_time": "30–70% reduction for large fact-to-small-dimension joins",
+        "cost": "High reduction — eliminates shuffle stage network I/O",
+        "memory": "Small increase in executor memory for broadcast table; net positive"
+      },
+      "applicability_conditions": [
+        "One side of the join is a small lookup or dimension table",
+        "Small table fits within executor memory limits",
+        "Distributed execution environment such as Spark or Hive",
+        "Join keys are present and selective"
+      ],
+      "tags": ["broadcast join", "shuffle join", "join optimization", "Spark hint", "dimension table", "fact table", "network I/O"],
+      "platform": ["Spark", "Hive", "Trino", "BigQuery"],
+      "input_type": "SQL Query",
+      "severity": "High",
+      "source": "Apache Spark Performance Tuning Guide",
+      "embedding_text": "Use broadcast join for small lookup table joins. Default shuffle join on small dimension tables causes unnecessary network I/O. Use broadcast join hint to replicate small table to all executors. Broadcast join shuffle join join optimization Spark hint dimension table fact table network I/O.",
+      "confidence_score": 0.93,
+      "related_entries": ["KB-SQL-001", "KB-CAC-001"],
+      "notes": "Broadcast threshold in Spark is controlled by spark.sql.autoBroadcastJoinThreshold (default 10MB). Increase with caution — too large a broadcast table causes OOM errors.",
+      "created_date": "2026-05-15",
+      "version": "1.0"
+    },
+
+    {
+      "entry_id": "KB-SQL-003",
+      "title": "Apply predicate pushdown to filter data early in execution",
+      "category": "SQL Optimization",
+      "subcategory": "Predicate Pushdown",
+      "problem_description": "Filters applied after joins or aggregations process more rows than necessary, increasing memory usage, shuffle size, and overall query execution time.",
+      "root_cause": "Query written in logical order without considering physical execution plan; filters placed after joins in the SQL structure even when they could be applied earlier.",
+      "optimization_strategy": "Rewrite queries to apply WHERE filters as early as possible — before joins, subqueries, or aggregations — so that fewer rows flow into expensive operations.",
+      "before_example": "SELECT a.customer_id, SUM(b.amount) FROM customers a JOIN transactions b ON a.customer_id = b.customer_id GROUP BY a.customer_id HAVING a.country = 'IN';",
+      "after_example": "SELECT a.customer_id, SUM(b.amount) FROM customers a JOIN transactions b ON a.customer_id = b.customer_id WHERE a.country = 'IN' GROUP BY a.customer_id;",
+      "explanation": "Moving the filter on country from HAVING to WHERE allows the query optimizer to apply it before the join, significantly reducing the number of rows that enter the join and aggregation stages. Most modern optimizers (Spark Catalyst, PostgreSQL planner) will push predicates automatically, but explicitly placing filters early makes the intent clear and guarantees correct behavior in cases where the optimizer cannot infer pushdown safely.",
+      "expected_impact": {
+        "execution_time": "20–60% reduction depending on filter selectivity",
+        "cost": "Medium to high — fewer rows shuffled across join and aggregation stages",
+        "memory": "Proportional reduction in intermediate dataset size"
+      },
+      "applicability_conditions": [
+        "Filter condition is on a column available before the join or aggregation",
+        "Filter has high selectivity — removes a significant fraction of rows",
+        "Query involves multi-table joins or GROUP BY operations",
+        "Optimizer may not automatically detect safe pushdown"
+      ],
+      "tags": ["predicate pushdown", "filter early", "WHERE clause", "HAVING clause", "join optimization", "query rewrite", "execution plan"],
+      "platform": ["Spark", "Hive", "PostgreSQL", "BigQuery", "Trino", "Redshift"],
+      "input_type": "SQL Query",
+      "severity": "High",
+      "source": "Google BigQuery SQL Best Practices Documentation",
+      "embedding_text": "Apply predicate pushdown to filter data early in execution. Filters after joins process more rows than necessary increasing memory and shuffle size. Apply WHERE filters before joins and aggregations. Predicate pushdown filter early WHERE clause HAVING clause join optimization query rewrite execution plan.",
+      "confidence_score": 0.94,
+      "related_entries": ["KB-SQL-001", "KB-SQL-004"],
+      "notes": "Verify the filter is semantically equivalent when moved — HAVING filters on aggregated values cannot always be moved to WHERE.",
+      "created_date": "2026-05-15",
+      "version": "1.0"
+    },
+
+    {
+      "entry_id": "KB-SQL-004",
+      "title": "Replace correlated subquery with JOIN or CTE",
+      "category": "SQL Optimization",
+      "subcategory": "Subquery Optimization",
+      "problem_description": "Correlated subqueries execute once for every row in the outer query, causing O(n) repeated scans of the inner table and severely degrading performance at scale.",
+      "root_cause": "Correlated subqueries are intuitive to write for row-by-row logic but are not optimized by most query planners. Developers often use them without understanding the execution cost.",
+      "optimization_strategy": "Rewrite correlated subqueries as JOIN operations or Common Table Expressions (CTEs) that execute once and are joined back to the outer query.",
+      "before_example": "SELECT order_id, amount FROM orders o WHERE amount > (SELECT AVG(amount) FROM orders WHERE customer_id = o.customer_id);",
+      "after_example": "WITH customer_avg AS (SELECT customer_id, AVG(amount) AS avg_amount FROM orders GROUP BY customer_id) SELECT o.order_id, o.amount FROM orders o JOIN customer_avg ca ON o.customer_id = ca.customer_id WHERE o.amount > ca.avg_amount;",
+      "explanation": "The correlated subquery computes AVG(amount) for every single row in the outer query — if orders has 10 million rows, the subquery runs 10 million times. The CTE-based rewrite computes the average once per customer_id group and joins the result back, reducing the operation from O(n) repeated scans to a single aggregation pass plus one join.",
+      "expected_impact": {
+        "execution_time": "50–95% reduction for large tables — scales linearly with row count",
+        "cost": "Very high — eliminates repeated full or partial table scans",
+        "memory": "Moderate increase for CTE materialization; net strongly positive"
+      },
+      "applicability_conditions": [
+        "Correlated subquery references an outer query column in its WHERE or HAVING clause",
+        "Inner table is large and scanned repeatedly",
+        "Aggregation in subquery is computable independently of each outer row",
+        "Query planner does not automatically decorrelate"
+      ],
+      "tags": ["correlated subquery", "CTE", "common table expression", "join rewrite", "subquery optimization", "O(n) scan", "query rewrite"],
+      "platform": ["Spark", "PostgreSQL", "BigQuery", "Trino", "Hive", "Redshift"],
+      "input_type": "SQL Query",
+      "severity": "Critical",
+      "source": "SQL Query Optimization in Relational Database Systems — Das, 2020",
+      "embedding_text": "Replace correlated subquery with JOIN or CTE. Correlated subqueries execute once per row causing repeated table scans. Rewrite as JOIN or CTE that executes once. Correlated subquery CTE common table expression join rewrite subquery optimization O(n) scan query rewrite.",
+      "confidence_score": 0.96,
+      "related_entries": ["KB-SQL-003", "KB-SQL-001"],
+      "notes": "Some modern optimizers (BigQuery, PostgreSQL 12+) can decorrelate simple subqueries automatically. Verify execution plan before and after to confirm improvement.",
+      "created_date": "2026-05-15",
+      "version": "1.0"
+    },
+
+    {
+      "entry_id": "KB-ETL-001",
+      "title": "Eliminate redundant transformation steps in ETL pipelines",
+      "category": "ETL & Pipeline Optimization",
+      "subcategory": "Redundant Transformation Elimination",
+      "problem_description": "ETL pipelines often contain duplicate filter conditions, repeated column derivations, or the same transformation applied at multiple stages, increasing processing time, resource cost, and maintenance complexity.",
+      "root_cause": "Pipelines built incrementally by multiple team members over time; lack of transformation audit or lineage review; copy-paste pattern reuse without consolidation.",
+      "optimization_strategy": "Audit the transformation DAG to identify steps producing identical or derivable outputs. Consolidate duplicate filters and column derivations into a single upstream step and reuse the result downstream.",
+      "before_example": "# Step 1: Filter active records\ndf1 = df.filter(col('status') == 'active')\n# Step 3 (later in pipeline): Filter active records again\ndf3 = df2.filter(col('status') == 'active')",
+      "after_example": "# Filter once and reuse\ndf_active = df.filter(col('status') == 'active')\n# All downstream steps use df_active directly",
+      "explanation": "Each redundant filter or transformation step in a Spark or PySpark pipeline forces a re-evaluation of the predicate or column derivation against the full dataset at that stage. Eliminating duplicates reduces the number of physical plan operations, lowers executor CPU usage, and reduces intermediate shuffle writes. In large pipelines, removing even two or three redundant steps can meaningfully reduce end-to-end execution time.",
+      "expected_impact": {
+        "execution_time": "10–30% reduction depending on pipeline size and number of redundant steps",
+        "cost": "Low to medium — reduces executor compute time",
+        "memory": "Minor reduction in intermediate materialization"
+      },
+      "applicability_conditions": [
+        "Pipeline has multiple transformation stages on the same dataset",
+        "Same filter condition appears more than once across stages",
+        "Column derivation is repeated rather than inherited from upstream",
+        "Pipeline was built incrementally or by multiple contributors"
+      ],
+      "tags": ["redundant transformation", "ETL optimization", "pipeline audit", "DAG optimization", "PySpark", "filter deduplication", "transformation consolidation"],
+      "platform": ["Spark", "PySpark", "Apache Airflow", "AWS Glue", "Azure Data Factory"],
+      "input_type": "ETL Workflow",
+      "severity": "Medium",
+      "source": "ETL Workflow Optimization Techniques in Data Engineering Systems — Kumar and Patel, IEEE Access 2021",
+      "embedding_text": "Eliminate redundant transformation steps in ETL pipelines. Duplicate filters and column derivations increase processing time and cost. Consolidate duplicate steps into a single upstream transformation and reuse downstream. Redundant transformation ETL optimization pipeline audit DAG optimization PySpark filter deduplication transformation consolidation.",
+      "confidence_score": 0.90,
+      "related_entries": ["KB-ETL-002", "KB-WRK-001"],
+      "notes": "Use Spark's explain() or DAG visualization in Airflow to identify redundant steps before manual code review.",
+      "created_date": "2026-05-15",
+      "version": "1.0"
+    },
+
+    {
+      "entry_id": "KB-ETL-002",
+      "title": "Replace full reload with incremental delta processing",
+      "category": "ETL & Pipeline Optimization",
+      "subcategory": "Incremental Processing",
+      "problem_description": "Full table reloads on every pipeline run reprocess all historical data regardless of what has changed, causing unnecessary compute cost, longer execution times, and increased risk of downstream data freshness delays.",
+      "root_cause": "Simplest implementation pattern during initial development; lack of change detection or watermark logic; schema does not include reliable updated_at or event_time columns.",
+      "optimization_strategy": "Implement incremental processing using a high-watermark pattern — track the last successfully processed timestamp or ID, and on each run process only records newer than the watermark.",
+      "before_example": "# Full reload every run\ndf = spark.read.table('source_table')\ndf.write.mode('overwrite').saveAsTable('target_table')",
+      "after_example": "# Incremental load using watermark\nlast_watermark = get_last_watermark()  # e.g., '2026-05-14 00:00:00'\ndf = spark.read.table('source_table').filter(col('updated_at') > last_watermark)\ndf.write.mode('append').saveAsTable('target_table')\nupdate_watermark(df.agg(max('updated_at')).collect()[0][0])",
+      "explanation": "Full reloads scale linearly with data volume — doubling the table size doubles compute time and cost regardless of how little data changed. Incremental processing scales with the change volume, which in most production pipelines is a small fraction of total data. This pattern is essential for maintaining SLA compliance as datasets grow over time.",
+      "expected_impact": {
+        "execution_time": "60–95% reduction for mature datasets with low daily change rates",
+        "cost": "Very high — compute scales with change volume rather than total data volume",
+        "memory": "Proportional to incremental batch size rather than full table"
+      },
+      "applicability_conditions": [
+        "Source table has a reliable updated_at or event_time timestamp column",
+        "Target table supports append or upsert operations",
+        "Daily change volume is small relative to total historical data",
+        "Pipeline runs on a regular schedule (daily, hourly)"
+      ],
+      "tags": ["incremental processing", "delta load", "watermark", "full reload", "ETL optimization", "change data capture", "append mode"],
+      "platform": ["Spark", "PySpark", "Apache Airflow", "AWS Glue", "Azure Data Factory", "Databricks"],
+      "input_type": "ETL Workflow",
+      "severity": "Critical",
+      "source": "Databricks Delta Lake Documentation — Incremental Data Processing Patterns",
+      "embedding_text": "Replace full reload with incremental delta processing. Full table reloads reprocess all historical data causing unnecessary compute cost. Use watermark pattern to process only new or changed records. Incremental processing delta load watermark full reload ETL optimization change data capture append mode.",
+      "confidence_score": 0.95,
+      "related_entries": ["KB-ETL-001", "KB-PAR-001"],
+      "notes": "Requires source schema to have a monotonically increasing column (timestamp or ID). Late-arriving data must be handled separately with a lookback window.",
+      "created_date": "2026-05-15",
+      "version": "1.0"
+    },
+
+    {
+      "entry_id": "KB-IDX-001",
+      "title": "Detect missing indexes on high-frequency filter columns",
+      "category": "Indexing Strategy",
+      "subcategory": "Missing Index Detection",
+      "problem_description": "Queries that repeatedly filter or join on columns without indexes perform full table scans on every execution, causing high I/O and long response times that scale poorly with data volume.",
+      "root_cause": "Indexes not created during initial schema design; columns added later without index review; DBA oversight gaps in growing schemas.",
+      "optimization_strategy": "Analyze query patterns to identify columns most frequently used in WHERE, JOIN ON, and ORDER BY clauses. Create targeted indexes on high-frequency, high-selectivity columns.",
+      "before_example": "-- No index on customer_id\nSELECT * FROM transactions WHERE customer_id = 'C12345';  -- Full table scan",
+      "after_example": "-- Create index\nCREATE INDEX idx_transactions_customer_id ON transactions(customer_id);\n-- Query now uses index scan\nSELECT order_id, amount FROM transactions WHERE customer_id = 'C12345';",
+      "explanation": "Without an index, the database engine reads every row in the table to find matching records — a cost that grows linearly with table size. An index on customer_id creates a sorted auxiliary structure that allows the engine to locate matching rows in O(log n) time. For high-cardinality columns used in frequent filter predicates, index creation is typically the single highest-impact schema change available.",
+      "expected_impact": {
+        "execution_time": "70–99% reduction for point lookups and range scans on indexed columns",
+        "cost": "Minimal index maintenance overhead on writes; major gain on reads",
+        "memory": "Index storage adds 10–30% of column data size"
+      },
+      "applicability_conditions": [
+        "Column is used frequently in WHERE or JOIN ON clauses",
+        "Column has high cardinality (many distinct values)",
+        "Workload is read-heavy relative to write-heavy",
+        "Table size is large enough that full scans are costly"
+      ],
+      "tags": ["missing index", "index creation", "full table scan", "query performance", "WHERE clause", "JOIN optimization", "cardinality"],
+      "platform": ["PostgreSQL", "MySQL", "Redshift", "SQL Server", "BigQuery"],
+      "input_type": "Metadata",
+      "severity": "High",
+      "source": "PostgreSQL Documentation — Index Types and Usage",
+      "embedding_text": "Detect missing indexes on high-frequency filter columns. Queries filtering on unindexed columns perform full table scans at high I/O cost. Create indexes on high-frequency high-selectivity WHERE and JOIN columns. Missing index index creation full table scan query performance WHERE clause JOIN optimization cardinality.",
+      "confidence_score": 0.92,
+      "related_entries": ["KB-SQL-001", "KB-PAR-001"],
+      "notes": "Indexes slow down INSERT, UPDATE, and DELETE operations. Avoid indexing on write-heavy tables unless read performance is critical. Composite indexes should match the column order in frequent query predicates.",
+      "created_date": "2026-05-15",
+      "version": "1.0"
+    },
+
+    {
+      "entry_id": "KB-PAR-001",
+      "title": "Ensure queries use partition pruning to avoid full table scans",
+      "category": "Partitioning Strategy",
+      "subcategory": "Partition Pruning",
+      "problem_description": "Queries on partitioned tables that do not filter on the partition key scan all partitions, negating the performance and cost benefits of partitioning entirely.",
+      "root_cause": "Query written without knowledge of table partition structure; partition column wrapped in a function or cast that prevents pruning; partition column not included in WHERE clause.",
+      "optimization_strategy": "Ensure all queries on partitioned tables include a filter on the partition key in the WHERE clause, and avoid applying functions or type casts to the partition column that prevent partition elimination.",
+      "before_example": "-- Partitioned by event_date but filter uses a function on the column\nSELECT user_id, event_type FROM events WHERE YEAR(event_date) = 2025;  -- Scans all partitions",
+      "after_example": "-- Filter directly on partition key range\nSELECT user_id, event_type FROM events WHERE event_date BETWEEN '2025-01-01' AND '2025-12-31';  -- Prunes to 2025 partitions only",
+      "explanation": "Partition pruning is the mechanism by which the query engine skips reading partitions that cannot contain rows matching the filter. When a function such as YEAR() is applied to the partition column, the optimizer cannot determine which partitions match without scanning all of them, defeating the purpose of partitioning. Using a direct range filter on the partition key allows the engine to identify and read only the relevant partitions, reducing I/O proportional to the fraction of data filtered.",
+      "expected_impact": {
+        "execution_time": "50–90% reduction depending on fraction of partitions accessed",
+        "cost": "Proportional reduction in bytes scanned — directly maps to cloud query cost savings",
+        "memory": "Significant reduction in executor memory for scan stages"
+      },
+      "applicability_conditions": [
+        "Table is partitioned by a date, region, or category column",
+        "Query filters on a column that matches the partition key",
+        "Partition column is not wrapped in a function or implicit cast",
+        "Table has a large number of partitions"
+      ],
+      "tags": ["partition pruning", "partition elimination", "full table scan", "partitioned table", "date partition", "query rewrite", "scan reduction"],
+      "platform": ["Spark", "Hive", "BigQuery", "Redshift", "Trino", "AWS Athena"],
+      "input_type": "SQL Query",
+      "severity": "High",
+      "source": "Google BigQuery Partitioned Table Best Practices",
+      "embedding_text": "Ensure queries use partition pruning to avoid full table scans. Queries not filtering on partition key scan all partitions negating partitioning benefits. Filter directly on partition key without functions to enable partition elimination. Partition pruning partition elimination full table scan partitioned table date partition query rewrite scan reduction.",
+      "confidence_score": 0.94,
+      "related_entries": ["KB-ETL-002", "KB-IDX-001"],
+      "notes": "BigQuery requires the partition column to be filtered directly in the WHERE clause for pruning to work. Wrapping in DATE() or CAST() prevents pruning even in BigQuery.",
+      "created_date": "2026-05-15",
+      "version": "1.0"
+    },
+
+    {
+      "entry_id": "KB-CAC-001",
+      "title": "Cache small lookup tables as Spark broadcast variables",
+      "category": "Caching Strategy",
+      "subcategory": "Broadcast Variable Caching",
+      "problem_description": "Small reference or lookup tables joined repeatedly across multiple Spark operations are re-read and re-shuffled on every use, generating unnecessary I/O and network overhead across the cluster.",
+      "root_cause": "Lookup tables treated the same as large fact tables in the execution plan; broadcast threshold not configured or table size slightly exceeds auto-broadcast limit.",
+      "optimization_strategy": "Explicitly cache small lookup DataFrames using Spark's broadcast() function or persist() with MEMORY_ONLY storage level so they are distributed once and reused from executor memory across all operations.",
+      "before_example": "# Lookup table re-read and shuffled on every join\nfor date in date_list:\n    df = spark.read.table('fact_events').filter(col('event_date') == date)\n    result = df.join(spark.read.table('dim_product'), 'product_id')  # Re-reads dim_product each time\n    result.write.mode('append').saveAsTable('output')",
+      "after_example": "# Broadcast lookup table once before the loop\nfrom pyspark.sql.functions import broadcast\ndim_product = broadcast(spark.read.table('dim_product'))  # Cached and distributed once\nfor date in date_list:\n    df = spark.read.table('fact_events').filter(col('event_date') == date)\n    result = df.join(dim_product, 'product_id')  # Uses cached broadcast copy\n    result.write.mode('append').saveAsTable('output')",
+      "explanation": "In the unoptimized version, dim_product is read from storage and shuffled to executors on every loop iteration. With broadcast caching, the table is serialized and sent to every executor once at the start and held in memory for the duration of the job. Subsequent joins use the in-memory copy without any additional I/O or network transfer. This is especially effective in iterative ETL pipelines that join the same small table repeatedly.",
+      "expected_impact": {
+        "execution_time": "20–60% reduction in iterative pipelines joining the same small table multiple times",
+        "cost": "High reduction in network I/O and storage read costs",
+        "memory": "Small increase in executor memory; lookup table size is the upper bound"
+      },
+      "applicability_conditions": [
+        "Lookup or dimension table is small enough to fit in executor memory",
+        "Same lookup table is joined more than once in a pipeline run",
+        "Pipeline runs iteratively over date ranges or batch partitions",
+        "Spark or PySpark execution environment"
+      ],
+      "tags": ["broadcast variable", "caching", "lookup table", "dimension table", "shuffle reduction", "Spark optimization", "memory caching", "iterative pipeline"],
+      "platform": ["Spark", "PySpark", "Databricks"],
+      "input_type": "ETL Workflow",
+      "severity": "Medium",
+      "source": "Apache Spark Documentation — Broadcast Variables and Shared Variables",
+      "embedding_text": "Cache small lookup tables as Spark broadcast variables. Small lookup tables re-read and shuffled on every join causing unnecessary I/O. Use broadcast() to distribute small tables once and reuse from executor memory. Broadcast variable caching lookup table dimension table shuffle reduction Spark optimization memory caching iterative pipeline.",
+      "confidence_score": 0.91,
+      "related_entries": ["KB-SQL-002", "KB-ETL-001"],
+      "notes": "Default Spark broadcast threshold is 10MB (spark.sql.autoBroadcastJoinThreshold). For tables between 10MB–200MB, consider raising the threshold or using explicit broadcast() calls. Avoid broadcasting tables that change frequently across pipeline runs.",
+      "created_date": "2026-05-15",
+      "version": "1.0"
+    },
+
+    {
+      "entry_id": "KB-WRK-001",
+      "title": "Detect pipeline bottlenecks from execution log task duration analysis",
+      "category": "Workflow Execution Optimization",
+      "subcategory": "Bottleneck Detection",
+      "problem_description": "Long-running pipelines often have one or two tasks that dominate total execution time, but without systematic log analysis these bottlenecks go undetected and optimization effort is spent on non-critical steps.",
+      "root_cause": "No structured log analysis process; pipeline execution monitored by total runtime only rather than per-task breakdown; absence of alerting on task-level duration thresholds.",
+      "optimization_strategy": "Parse pipeline execution logs to extract per-task start and end timestamps. Calculate task duration, identify tasks exceeding a configurable threshold, and flag the top-N slowest tasks for investigation.",
+      "before_example": "# No per-task analysis — only total pipeline duration monitored\n[2026-05-14 02:00:00] Pipeline started\n[2026-05-14 04:47:32] Pipeline completed — Total: 2h 47m",
+      "after_example": "# Per-task duration extracted from logs\nTask: ingest_raw_events        Duration: 4m 12s   Status: OK\nTask: join_customer_dimension  Duration: 1h 58m   Status: SLOW  <-- Bottleneck flagged\nTask: aggregate_daily_metrics  Duration: 18m 43s  Status: OK\nTask: write_output_table       Duration: 26m 11s  Status: OK\n# Recommendation: Investigate join_customer_dimension — likely data skew or missing broadcast",
+      "explanation": "The Pareto principle applies strongly to pipeline execution: a small number of tasks typically account for most of the runtime. By parsing execution logs to extract per-task durations, the system can identify which specific task is responsible for the bottleneck and direct optimization effort precisely. In the example, the join task accounts for over 70% of total pipeline time — a strong signal for data skew or join type investigation.",
+      "expected_impact": {
+        "execution_time": "Indirectly enables 30–70% reduction by correctly targeting optimization effort",
+        "cost": "Reduces wasted engineering time spent optimizing non-bottleneck tasks",
+        "memory": "No direct memory impact — analysis is diagnostic"
+      },
+      "applicability_conditions": [
+        "Pipeline execution logs are available with per-task timestamps",
+        "Pipeline has multiple distinct tasks or stages",
+        "Total pipeline duration is significantly longer than expected",
+        "No existing per-task monitoring or alerting is in place"
+      ],
+      "tags": ["bottleneck detection", "execution log analysis", "task duration", "pipeline monitoring", "Airflow", "slow task", "log parsing", "performance profiling"],
+      "platform": ["Apache Airflow", "Spark", "AWS Glue", "Azure Data Factory", "Databricks"],
+      "input_type": "Pipeline Log",
+      "severity": "High",
+      "source": "Apache Airflow Documentation — Task Monitoring and Log Management",
+      "embedding_text": "Detect pipeline bottlenecks from execution log task duration analysis. Long-running pipelines have one or two tasks dominating execution time that go undetected without log analysis. Parse execution logs to extract per-task durations and flag slowest tasks. Bottleneck detection execution log analysis task duration pipeline monitoring Airflow slow task log parsing performance profiling.",
+      "confidence_score": 0.89,
+      "related_entries": ["KB-ETL-001", "KB-ETL-002"],
+      "notes": "For Airflow pipelines, task duration is available from the task_instance table in the metadata database. For Spark, Stage and Task durations are in the Spark UI event logs and can be parsed programmatically using the Spark History Server REST API.",
+      "created_date": "2026-05-15",
+      "version": "1.0"
+    }
+
+  ]
+}
